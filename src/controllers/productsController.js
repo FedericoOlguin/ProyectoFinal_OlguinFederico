@@ -7,28 +7,41 @@ const productsC = new ProductsContenedor()
 const productsController = {
 
     getAllProducts: async (req, res) => {
-        let products = await productsC.getAllProducts()
-        return { status: 200, products }
+        try {
+
+            let products = await productsC.getAllProducts()
+            return res.json({ status: 200, products })
+        } catch (err) {
+            console.log(err);
+        }
     },
     getById: ("/:id", async (req, res) => {
-        let product = await productsC.getById(parseInt(req.params.id))
-        if (product === null) return res.send(`El Producto con id:   ${req.params.id} no existe`)
-        res.send(product)
+        try {
+            let products = await productsC.getById(parseInt(req.params.id))
+            if (products === null) return res.json({ message: `El Producto con id: ${req.params.id} no existe` })
+            return res.json({ status: 200, products })
+        } catch (err) {
+            console.log(err);
+        }
     }),
-    addProduct: async (req) => {
-        let product = req.obj
-        // console.log(req.obj);
-        if (product === undefined) return ({ status: 400, message: "El producto no se envio correctamente" })
-        if (product.title === "" || product.price === "" || product.thumbnail === "") return ({ status: 400, message: "El producto no se envio correctamente" })
+    addProduct: async (req, res) => {
+        let product = req.body
+        console.log(product);
+        if (product === undefined) return res.json({ status: 400, message: "El producto no se envio correctamente" })
+        if (product.title === "" || product.price === "" || product.thumbnail === "") return res.json({ status: 400, message: "El producto no se envio correctamente" })
         let saveProduct = await productsC.saveProduct(product)
-        return ({ status: 200, message: "El producto se cargo correctamente", products: [...saveProduct] })
-
+        res.json({ status: 200, message: "El producto se cargo correctamente", products: [...saveProduct] })
     },
-    delete: ("/:id", async (req, res) => {
-        let deleted = await productsC.deleteById(req.params.id)
+    delete: async (req, res) => {
+        let deleted = await productsC.delete(req.params.id)
         if (deleted) return res.send("Producto no encontrado")
-        res.send(`Producto con id: ${req.params.id} eliminado`)
-    }),
+        res.json({ status: 200, message: `Producto con id: ${req.params.id} eliminado` })
+    },
+    updateById: async (req, res) => {
+        let respuesta = await productsC.updateById(req.params.id, req.body)
+        if (!respuesta) return res.json({ status: 400, message: "El producto no fue encontrado" })
+        res.json({ status: 200, respuesta })
+    }
 
 }
 export default productsController

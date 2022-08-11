@@ -8,4 +8,6 @@ const PORT = process.env.PORT || 8080
 
 
 app.use(express.json())
-app.use("/api", prodRouter)
+app.use("/api/products", prodRouter)
+
+const server = app.listen(PORT, () => console.log("Server connect on port " + PORT))

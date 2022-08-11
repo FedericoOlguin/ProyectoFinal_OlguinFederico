@@ -1,7 +1,7 @@
 import fs from "fs"
-import __dirname from "../utils.js"
+import __dirname from "../../utils.js"
 
-const path = __dirname + "/files/products.json"
+const path =  "./src/files/products.json"
 
 class ProductsContenedor {
 
@@ -41,7 +41,7 @@ class ProductsContenedor {
     getById = async (id) => {
         try {
             let products = await this.getAllProducts()
-            let retornar = products.find(res => res.id === id)
+            let retornar = products.find(res => res.id + "" === id + "")
             if (retornar === undefined) {
                 console.log("El usuario con el id: " + id + " no existe");
                 return null
@@ -55,7 +55,7 @@ class ProductsContenedor {
 
     }
 
-    deleteById = async (id) => {
+    delete = async (id) => {
         let products = await this.getAllProducts()
         try {
             if (products.find(res => res.id + "" === "" + id)) {
