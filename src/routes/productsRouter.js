@@ -1,18 +1,18 @@
 import { Router } from "express"
-import ProductsContenedor from "../contenedores/productsContenedor.js"
 import productsController from "../controllers/productsController.js"
-const productsC = new ProductsContenedor()
+import { authorization } from "../../utils.js"
+const { isAdmin } = authorization
 const router = Router()
 
 
 router.route("/")
     .get(productsController.getAllProducts)
-    .post(productsController.addProduct)
+    .post(isAdmin, productsController.addProduct)
 
 router.route("/:id")
     .get(productsController.getById)
-    .delete(productsController.delete)
-    .put(productsController.updateById)
+    .delete(isAdmin, productsController.delete)
+    .put(isAdmin, productsController.updateById)
 
 
 

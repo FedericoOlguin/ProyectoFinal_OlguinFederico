@@ -1,7 +1,7 @@
 import fs from "fs"
 import __dirname from "../../utils.js"
 
-const path =  "./src/files/products.json"
+const path = "./src/files/products.json"
 
 class ProductsContenedor {
 
@@ -21,6 +21,8 @@ class ProductsContenedor {
 
     saveProduct = async (product) => {
         let products = await this.getAllProducts()
+        product.timestamp = Date.now()
+        product.code = product.timestamp + Math.floor(Math.random() * (100 - 1) - 1)
         try {
             if (products.length === 0) {
                 product.id = 1
