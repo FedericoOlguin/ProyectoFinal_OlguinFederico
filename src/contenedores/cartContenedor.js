@@ -74,13 +74,14 @@ class CartContenedor {
     }
     addProduct = async (idCart, product) => {
         let carts = await this.getAllCarts()
-        console.log(product);
         try {
             let cart = carts.find(cart => cart.id + "" === idCart + "")
-            console.log(cart.products);
-            if (!cart) return false
+            // console.log(cart.products);
+            // console.log(product);
             console.log(cart.products.find(prod => prod.id_prod + "" === product.id_prod + ""));
-            if (cart.products.find(prod => prod.id_prod + "" === product.id_prod + "")) {
+
+            if (!cart) return false
+            if (!cart.products.find(prod => prod.id_prod + "" === product.id_prod + "")) {
                 cart.products.push(product)
             } else {
                 let newList = cart.products.map(prod => prod.id_prod + "" === product.id_prod + "" ? { ...prod, quantity: prod.quantity + product.quantity } : { ...prod })

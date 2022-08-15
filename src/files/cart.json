@@ -30,6 +30,14 @@
       {
         "id_prod": 35,
         "quantity": 104
+      },
+      {
+        "id_prod": 40,
+        "quantity": 9
+      },
+      {
+        "id_prod": 20,
+        "quantity": 4
       }
     ],
     "id": 5
