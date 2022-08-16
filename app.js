@@ -1,7 +1,7 @@
 import express from "express";
 import prodRouter from "./src/routes/productsRouter.js"
 import cartRouter from "./src/routes/cartRouter.js"
-const admin = false
+const admin = true
 const app = express()
 
 

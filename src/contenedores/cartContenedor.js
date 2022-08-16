@@ -76,9 +76,6 @@ class CartContenedor {
         let carts = await this.getAllCarts()
         try {
             let cart = carts.find(cart => cart.id + "" === idCart + "")
-            // console.log(cart.products);
-            // console.log(product);
-            console.log(cart.products.find(prod => prod.id_prod + "" === product.id_prod + ""));
 
             if (!cart) return false
             if (!cart.products.find(prod => prod.id_prod + "" === product.id_prod + "")) {

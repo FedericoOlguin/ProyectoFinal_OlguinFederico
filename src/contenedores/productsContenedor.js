@@ -22,7 +22,7 @@ class ProductsContenedor {
     saveProduct = async (product) => {
         let products = await this.getAllProducts()
         product.timestamp = Date.now()
-        product.code = product.timestamp + Math.floor(Math.random() * (100 - 1) - 1)
+        product.code = product.timestamp + Math.floor(Math.random() * (1000 - 100) - 100)
         try {
             if (products.length === 0) {
                 product.id = 1
@@ -84,12 +84,9 @@ class ProductsContenedor {
 
     updateById = async (id, newProduct) => {
         let products = await this.getAllProducts()
-        const { title, price, thumbnail } = newProduct
-        // console.log(title, price, thumbnail);
         try {
             if (products.find(res => res.id + "" === "" + id)) {
-                console.log("si entra a la cuestion");
-                let newArray = products.map(res => res.id + "" === id + "" ? { ...res, title, price, thumbnail } : { ...res })
+                let newArray = products.map(res => res.id + "" === id + "" ? { ...res, ...newProduct } : { ...res })
                 await fs.promises.writeFile(path, JSON.stringify(newArray, null, 2))
                 console.log(newArray.find(res => res.id + "" === "" + id));
                 return newArray.find(res => res.id + "" === "" + id)
