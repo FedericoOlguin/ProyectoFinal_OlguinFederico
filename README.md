@@ -2,6 +2,11 @@
 
 ## Endpoints products
 
+Los endpoint de products, que pueden modificar la lista de productos estan protegidas por una variable "admin" definida en el archivo app.js
+Cuando la variable es true, significa que si esta autorizado
+
+<hr>
+
 \*http://localhost:8080/api/products/ (method GET)
 Muestra todos los productos
 
@@ -35,7 +40,6 @@ Requiere objeto con los datos actualizados
 "price": 100,
 "thumbnail": "https://images.pexels.com/photos/3819969/pexels-photo-3819969.jpeg,
 }
-
 
 ## Endpoints cart
 
