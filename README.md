@@ -1,6 +1,6 @@
-Api ecommerce
+# Api ecommerce
 
-Endpoints
+## Endpoints products
 
 \*http://localhost:8080/api/products/ (method GET)
 Muestra todos los productos
@@ -37,6 +37,7 @@ Requiere objeto con los datos actualizados
 }
 
 
+## Endpoints cart
 
 \*http://localhost:8080/api/cart/ (method POST)
 Crea un cart y retorna su id
@@ -53,10 +54,9 @@ Agrega producto al cart
 Requiere objeto con cantidad e id del producto
 
 {
-  "id_prod": 20,
-  "quantity": 4
+"id_prod": 20,
+"quantity": 4
 }
-
 
 \*http://localhost:8080/api/cart/:id/products/:id_prod (method POST)
 Elimina un producto de un cart determinado, por su id
