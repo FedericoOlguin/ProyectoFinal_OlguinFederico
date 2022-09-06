@@ -1,20 +1,23 @@
 import CartContenedor from "../contenedores/cartContenedor.js";
-
+import service from "../dao/configDao.js";
 const cartC = new CartContenedor()
 
 
 const CartController = {
     createCart: async (req, res) => {
         try {
-            let idCart = await cartC.createCart()
-            res.json({ status: 200, idCart })
+            let obj = req.body ? ({ ...req.body }) : ({})
+            // let idCart = await cartC.createCart()
+            let idCart = await service.cartService.save(obj)
+            res.json({ status: 200, cartId: idCart._id })
         } catch (err) {
             res.json({ status: 500, message: "Algo salio mal, vuelava a intentar nuevamente mas tarde" })
         }
     },
     deleteCart: async (req, res) => {
         try {
-            let array = await cartC.deleteCart(req.params.id)
+            // let array = await cartC.deleteCart(req.params.id)
+            let array = await service.cartService.delete(req.params.id)
             if (!array) return res.json({ status: 400, message: "El producto no se encontro o ya fue eliminado" })
             res.json({ status: 200, array })
         } catch (err) {
@@ -23,17 +26,38 @@ const CartController = {
     },
     getProductsCart: async (req, res) => {
         try {
-            let cart = await cartC.getCartById(req.params.id)
-            res.json({ status: 200, products: cart.products })
+            // let cart = await cartC.getCartById(req.params.id)
+            let cart = await service.cartService.getProducts(req.params.id)
+            res.json({ status: 200, cart })
         } catch (err) {
             res.json({ status: 500, message: "Algo salio mal, vuelava a intentar nuevamente mas tarde" })
         }
     },
     addProducts: async (req, res) => {
-        const prod = req.body
+        let prod = {}
+        const otro = req.body
         try {
-            let cart = await cartC.addProduct(req.params.id, prod)
-            if (!cart) return res.json({ status: 400, message: "EL carrito no existe" })
+            // let cart = await cartC.addProduct(req.params.id, prod)
+            let cartU = await service.cartService.getById(req.params.id)
+            if (!cartU) return res.json({ status: 400, message: "EL carrito no existe" })
+            if (!cartU.products.find(prod => prod.id_prod + "" === req.body.id_prod + "")) {
+                let array = [...cartU.poducts]
+                console.log("en no");
+                array.push(req.body)
+                prod = {
+                    ...cartU,
+                    products: array
+                }
+            } else {
+                console.log("en si");
+                let newList = cartU.products.map(prod => prod.id_prod + "" === req.body.id_prod + "" ? { ...prod, quantity: prod.quantity + req.body.quantity } : { ...prod })
+                cartU.products = [...newList]
+                prod = {
+                    ...cartU,
+                    products: newList
+                }
+            }
+            let cart = await service.cartService.update(req.params.id, prod)
             res.json({ status: 200, cart })
 
         } catch (err) {
