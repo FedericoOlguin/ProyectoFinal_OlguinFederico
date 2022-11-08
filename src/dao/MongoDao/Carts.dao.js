@@ -15,4 +15,5 @@ export default class Cart extends MongoDBContainer {
     constructor() {
         super(collection, cartSchema)
     }
+
 }

@@ -1,13 +1,10 @@
-import CartContenedor from "../contenedores/cartContenedor.js";
 import service from "../dao/configDao.js";
-const cartC = new CartContenedor()
 
 
 const CartController = {
     createCart: async (req, res) => {
         try {
             let obj = req.body ? ({ ...req.body }) : ({})
-            // let idCart = await cartC.createCart()
             let idCart = await service.cartService.save(obj)
             res.json({ status: 200, cartId: idCart._id })
         } catch (err) {
@@ -16,7 +13,6 @@ const CartController = {
     },
     deleteCart: async (req, res) => {
         try {
-            // let array = await cartC.deleteCart(req.params.id)
             let array = await service.cartService.delete(req.params.id)
             if (!array) return res.json({ status: 400, message: "El producto no se encontro o ya fue eliminado" })
             res.json({ status: 200, array })
@@ -26,7 +22,6 @@ const CartController = {
     },
     getProductsCart: async (req, res) => {
         try {
-            // let cart = await cartC.getCartById(req.params.id)
             let cart = await service.cartService.getProducts(req.params.id)
             res.json({ status: 200, cart })
         } catch (err) {
@@ -37,7 +32,6 @@ const CartController = {
         let prod = {}
         const otro = req.body
         try {
-            // let cart = await cartC.addProduct(req.params.id, prod)
             let cartU = await service.cartService.getById(req.params.id)
             if (!cartU) return res.json({ status: 400, message: "EL carrito no existe" })
             if (!cartU.products.find(prod => prod.id_prod + "" === req.body.id_prod + "")) {
@@ -65,8 +59,12 @@ const CartController = {
         }
     },
     deleteProduct: async (req, res) => {
+        const { id, id_prod } = req.params
         try {
-            let cart = await cartC.deleteProduct(req.params.id, req.params.id_prod)
+            let cartU = await service.cartService.getById(id)
+            if (!cartU) return res.json({ status: 400, message: "EL carrito no existe" })
+            cartU.products = [...cartU.products.filter(prod => prod.id_prod + "" !== id_prod + "")]
+            let cart = await service.cartService.deleteProduct(req.params.id, req.params.id_prod)
             if (!cart) return res.json({ status: 400, message: "No se econtro el producto" })
             res.json({ status: 200, cart })
         } catch (err) {
